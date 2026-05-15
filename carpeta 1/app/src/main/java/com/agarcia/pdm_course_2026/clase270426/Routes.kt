@@ -1,13 +1,14 @@
-package com.agarcia.pdm_course_2026.clase220426
+package com.agarcia.pdm_course_2026.clase270426
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
+
 sealed class Routes : NavKey {
   @Serializable
-  data object Home : Routes()
+  data object Menu : Routes()
 
 
   @Serializable
-  data class MovieDetail(val movieId: Int) : Routes()
+  data object Order : Routes()
 }

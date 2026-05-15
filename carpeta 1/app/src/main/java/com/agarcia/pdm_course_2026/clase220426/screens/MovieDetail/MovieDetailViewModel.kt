@@ -1,0 +1,28 @@
+package com.agarcia.pdm_course_2026.clase220426.screens.MovieDetail
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.agarcia.pdm_course_2026.clase220426.data.repositories.MovieRepository.MovieApiRepository
+import com.agarcia.pdm_course_2026.clase220426.data.repositories.MovieRepository.MovieRepository
+import com.agarcia.pdm_course_2026.clase220426.model.Movie
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class MovieDetailViewModel : ViewModel() {
+  private val movieRepository: MovieRepository = MovieApiRepository()
+
+  private val _movie = MutableStateFlow<Movie?>(null)
+  val movie = _movie.asStateFlow()
+
+  private val _loading = MutableStateFlow<Boolean>(false)
+  val loading = _loading.asStateFlow()
+
+  fun loadMovieById(id: Int) {
+    viewModelScope.launch {
+      _loading.value = true
+      _movie.value = movieRepository.getMovieById(id)
+      _loading.value = false
+    }
+  }
+}

@@ -1,0 +1,31 @@
+package com.agarcia.pdm_course_2026.clase220426.screens.MovieList
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.agarcia.pdm_course_2026.clase220426.data.repositories.MovieRepository.MovieApiRepository
+import com.agarcia.pdm_course_2026.clase220426.data.repositories.MovieRepository.MovieRepository
+import com.agarcia.pdm_course_2026.clase220426.model.Movie
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class MovieListViewModel : ViewModel() {
+  private val movieRepository: MovieRepository = MovieApiRepository()
+  private val _movies = MutableStateFlow<List<Movie>>(emptyList())
+  val movies = _movies.asStateFlow()
+
+  private val _loading = MutableStateFlow<Boolean>(false)
+  val loading = _loading.asStateFlow()
+
+  init {
+    loadMovies()
+  }
+
+  fun loadMovies() {
+    viewModelScope.launch {
+      _loading.value = true
+      _movies.value = movieRepository.getMovies()
+      _loading.value = false
+    }
+  }
+}
